@@ -1,5 +1,8 @@
 # Lab3
 
+## Enable the Wired Network interface on your PI
+
+```
 $ sudo nano /etc/network/interfaces.d/eth0
 
 ** paste these lines
@@ -11,4 +14,10 @@ netmask 255.255.255.0
 gateway 11.11.11.1
 
 <CTRL><X> then "Y" to save
+
+$ sudo nano reboot
+
+```
+
+
 
