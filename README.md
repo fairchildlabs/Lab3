@@ -1,6 +1,6 @@
 # Lab3
 
-## Enable the Wired Network interface on your PI
+## 3.1 Enable the Wired Network interface on your PI
 
 ```
 $ sudo nano /etc/network/interfaces.d/eth0
@@ -18,6 +18,11 @@ gateway 11.11.11.1
 $ sudo nano reboot
 
 ```
+
+## 3.2 Use Ethernet (Network) Cable to attach LABPC to PI
+
+Disable Network Connection on PI (DEMO)
+Start Putty normally. (Alternate, use 11.11.11.1 IP address)
 
 
 

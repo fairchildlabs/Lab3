@@ -16,13 +16,41 @@ void * dummy_thread( void * pvScootDevice)
 
 }
 
+
+char *szUSBCamResolution [] =
+{
+	"640x480",      //0
+	"800x600",      //1
+	"1280x720",     //2
+	"1920x1080",    //3
+	"2560x1440",    //4
+	"2688x1520",    //5
+	"3264x2448"     //6
+	
+};
+
+int iFrameRateCam[] =
+{
+	30,
+	60
+};
+
+
 void * video0_run(void * pvScootdThreads)
 {
+	char fn[128];
 	char cmdbuf[512];
 	scootd_thread_config *pScootThread = pvScootdThreads;
+	scoot_device *pScootDevice = pScootThread->pScootDevice;
+	int fr = iFrameRateCam[pScootDevice->pState->bits.frame_rate];	
+	char *szRes = szUSBCamResolution[pScootDevice->pState->bits.resolution];
 
+	sprintf(fn, "/var/www/html/video_13/00%10d_%08x_%s.mp4", time(NULL), pScootDevice->pState->state, szRes);
+		
 
-	sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate 30 -video_size 640x480 -i /dev/video0 /var/www/html/video_13/00%10d_640x480.mp4", time(NULL));
+	sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -i /dev/video0 %s", fr, szRes, fn);
+
+	printf("SENDING CMD> %s\n", cmdbuf);
 
 	scootd_util_run_command_nonblocking(pScootThread, cmdbuf);
 	return NULL;
