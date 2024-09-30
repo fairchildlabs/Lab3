@@ -25,7 +25,7 @@ char *szUSBCamResolution [] =
 	"1920x1080",    //3
 	"2560x1440",    //4
 	"2688x1520",    //5
-	"3264x2448"     //6
+	"3264x2448"     //6 
 	
 };
 
@@ -34,6 +34,15 @@ int iFrameRateCam[] =
 	30,
 	60
 };
+
+//ffmpeg -f v4l2 -framerate 30 -video_size 1920x1080 -i /dev/video0 /var/www/html/video_13/001727636398_00000301_1920x1080.mp4
+
+
+//ffmpeg -f v4l2 -framerate 60 -video_size 1280x720 -input_format mjpeg -i /dev/video0 -preset faster -pix_fmt yuv420p /var/www/html/video_13/1out.mkv
+//ffmpeg -f v4l2 -framerate 60 -video_size 1920x1080 -input_format mjpeg -i /dev/video0 -preset faster -pix_fmt yuv420p /var/www/html/video_13/13out.mkv
+
+//sudo mount -t auto -v /dev/sda1 /var/www/html/usb
+
 
 
 void * video0_run(void * pvScootdThreads)
@@ -48,7 +57,7 @@ void * video0_run(void * pvScootdThreads)
 	sprintf(fn, "/var/www/html/video_13/00%10d_%08x_%s.mp4", time(NULL), pScootDevice->pState->state, szRes);
 		
 
-	sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -i /dev/video0 %s", fr, szRes, fn);
+	sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -i /dev/video0 -preset faster -pix_fmt yuv420p %s", fr, szRes, fn);
 
 	printf("SENDING CMD> %s\n", cmdbuf);
 
@@ -105,6 +114,7 @@ int main(int argc, char **argv)
 	char formatted_time[50];
 	scootd_thread_config scdThreadConfig[SCOOTD_MAX_THREADS];
 
+	//initialize memory zero
 	memset(&aScootDevice, 0, sizeof(scoot_device));
 	for(i = 0; i < SCOOTD_MAX_THREADS; i++)
 	{

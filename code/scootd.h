@@ -36,6 +36,14 @@ typedef union
 } scoot_state;
 
 
+//  0xABCD_EF0 12
+//                        1111 = f = 15
+//                    11111111 = ff = 256
+
+
+
+
+
 #define SCOOTD_MAX_THREADS 16
 
 #define SCOOTD_THREAD_UTIL_BUFFER_SIZE 64
