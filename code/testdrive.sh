@@ -56,4 +56,6 @@ sleep 60
 echo "Sleeping 60"
 sleep 60
 
+./scootdtest 0
+echo "DONE TEST DRIVE"
 

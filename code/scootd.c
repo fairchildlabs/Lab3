@@ -43,7 +43,13 @@ int iFrameRateCam[] =
 
 //sudo mount -t auto -v /dev/sda1 /var/www/html/usb
 
+//Library to do raw capture from C. https://libuvc.github.io/libuvc/
+//ffmpeg -f video4linux2 -list_formats all -i /dev/video0
 
+//https://stackoverflow.com/questions/44960632/ffmpeg-records-5-frames-per-second-on-a-device-that-cheese-records-at-20-fps
+
+char *szBaseVideoPath = "/media/astros/F0C1-F9A3/";
+//char *szBaseVideoPath = "/var/www/html/video_13/";
 
 void * video0_run(void * pvScootdThreads)
 {
@@ -54,10 +60,17 @@ void * video0_run(void * pvScootdThreads)
 	int fr = iFrameRateCam[pScootDevice->pState->bits.frame_rate];	
 	char *szRes = szUSBCamResolution[pScootDevice->pState->bits.resolution];
 
-	sprintf(fn, "/var/www/html/video_13/00%10d_%08x_%s.mp4", time(NULL), pScootDevice->pState->state, szRes);
+//	sprintf(fn, "%s00%10d_%08x_%s.mp4", szBaseVideoPath, time(NULL), pScootDevice->pState->state, szRes);
+sprintf(fn, "%s00%10d_%08x_%s.mov", szBaseVideoPath, time(NULL), pScootDevice->pState->state, szRes);
 		
 
-	sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -i /dev/video0 -preset faster -pix_fmt yuv420p %s", fr, szRes, fn);
+//old doesn't keep up with FPS	
+//sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -i /dev/video0 -preset faster -pix_fmt yuv420p %s", fr, szRes, fn);
+
+sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -c:v mjpeg -i /dev/video0  -c:v copy %s", fr, szRes, fn);
+
+
+// ffmpeg -f v4l2 -framerate 30 -video_size 2688x1520 -c:v mjpeg -i /dev/video0 -c:v copy /media/astros/F0C1-F9A3/2688x1520.mov
 
 	printf("SENDING CMD> %s\n", cmdbuf);
 
