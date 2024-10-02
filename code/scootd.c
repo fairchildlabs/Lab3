@@ -48,8 +48,9 @@ int iFrameRateCam[] =
 
 //https://stackoverflow.com/questions/44960632/ffmpeg-records-5-frames-per-second-on-a-device-that-cheese-records-at-20-fps
 
-char *szBaseVideoPath = "/media/astros/F0C1-F9A3/";
+//char *szBaseVideoPath = "/media/astros/F0C1-F9A3/";
 //char *szBaseVideoPath = "/var/www/html/video_13/";
+char *szBaseVideoPath = "/mnt/";
 
 void * video0_run(void * pvScootdThreads)
 {
