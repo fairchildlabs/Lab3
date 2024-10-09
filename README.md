@@ -66,10 +66,10 @@ $ ./scootd
 
 ** Open a second SSH session to the PI (mtputty)
 
-BA!!!! (add chmod +x to the git)
 $2> cd Lab3/code
 $2> ./testdrive.sh
 
+```
 
 
 
