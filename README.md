@@ -53,11 +53,22 @@ $ ln -s /mnt /var/www/html/usb
 ## 3.4 
 ```
 $ git clone https://github.com/fairchildlabs/Lab3.git
-cd Lab2/code
-sudo mkdir /var/www/html/video_13
-make
-make scootdtest
-```
+$ cd Lab3/code
+$ make
+$ make scootdtest
+
+** cleanup the old videos
+
+$ rm /mnt/*
+
+** Start the test
+$ ./scootd
+
+** Open a second SSH session to the PI (mtputty)
+
+BA!!!! (add chmod +x to the git)
+$2> cd Lab3/code
+$2> ./testdrive.sh
 
 
 
