@@ -1,3 +1,12 @@
+```
+$      - copy and paste into SSH or PI terminal (only the charecters after the $) 
+PI>    - means PI terminal ONLY (Touchscreen or VNC)
+//This is a comment in code, for information only, don't type
+LABPC>  0This means type this into the cmd window on your labpc
+$$$ This means the lines that follow can be copied and pasted all at once (multiple lines)
+2$  Means 2nd SSH Terminal 
+```
+
 # Lab3
 
 ## 3.1 Enable the Wired Network interface on your PI
@@ -38,8 +47,17 @@ $ mount -a
 ** This creates a link so you can view files on the USB drive from browser
 $ sudo mkdir /var/www/html/usb
 $ ln -s /mnt /var/www/html/usb
+```
 
 
+#3.4 
+```
+git clone https://github.com/fairchildlabs/Lab3.git
+cd Lab2/code
+sudo mkdir /var/www/html/video_13
+make
+make scootdtest
+```
 
 
 

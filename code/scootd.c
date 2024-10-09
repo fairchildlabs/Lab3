@@ -59,6 +59,13 @@ int iFrameRateCam[] =
                              4608x2592 [14.35 fps - (0, 0)/4608x2592 crop]
 */
 
+//ffmpeg -f v4l2 -framerate 30 -video_size 800x600 -i /dev/video0 -preset faster -pix_fmt yuv420p out.mp4
+
+//ffmpeg -f video4linux2 -input_format h264 -video_size 800x600 -framerate 30 -i /dev/video0 -vcodec h264 -preset faster -pix_fmt yuv420p out.mp4
+
+//ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of default=noprint_wrappers=1:nokey=1 
+
+
 char *szBaseVideoPath = "/mnt/";
 
 void * video0_run(void * pvScootdThreads)
@@ -71,17 +78,18 @@ void * video0_run(void * pvScootdThreads)
 	char *szRes = szUSBCamResolution[pScootDevice->pState->vid[0].resolution];
 	int raw = pScootDevice->pState->vid[0].raw;
 	
-	sprintf(fn, "%s00%10d_%08x_%s.mov", szBaseVideoPath, time(NULL), pScootDevice->pState->state, szRes);
 		
 
 	
 
 	if(raw)
 	{
+		sprintf(fn, "%s00%10d_%08x_%s.mov", szBaseVideoPath, time(NULL), pScootDevice->pState->state, szRes);
 		sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -c:v mjpeg -i /dev/video0  -c:v copy %s", fr, szRes, fn);
 	}
 	else
 	{
+		sprintf(fn, "%s00%10d_%08x_%s.mp4", szBaseVideoPath, time(NULL), pScootDevice->pState->state, szRes);
 		sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -i /dev/video0 -preset faster -pix_fmt yuv420p %s", fr, szRes, fn);
 	}
 
