@@ -25,13 +25,13 @@ typedef union
 	unsigned int state;
 	struct
 	{
-		unsigned int video0       : 1;
-		unsigned int video1       : 1;
-		unsigned int rsvd         : 6;
-		unsigned int resolution   : 4;
-		unsigned int frame_rate   : 4;
+		unsigned int video        :  1;
+		unsigned int frame_rate   :  1;
+		unsigned int raw          :  1;
+		unsigned int rsvd         :  1;
+		unsigned int resolution   :  4;
 
-	} bits;
+	} vid[2];
 
 } scoot_state;
 

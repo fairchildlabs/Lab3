@@ -50,6 +50,15 @@ int iFrameRateCam[] =
 
 //char *szBaseVideoPath = "/media/astros/F0C1-F9A3/";
 //char *szBaseVideoPath = "/var/www/html/video_13/";
+
+//cat /proc/cpuinfo | grep --ignore-case serial
+/*
+0 : imx708_wide [4608x2592 10-bit RGGB] (/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a)
+    Modes: 'SRGGB10_CSI2P' : 1536x864 [120.13 fps - (768, 432)/3072x1728 crop]
+                             2304x1296 [56.03 fps - (0, 0)/4608x2592 crop]
+                             4608x2592 [14.35 fps - (0, 0)/4608x2592 crop]
+*/
+
 char *szBaseVideoPath = "/mnt/";
 
 void * video0_run(void * pvScootdThreads)
@@ -58,20 +67,24 @@ void * video0_run(void * pvScootdThreads)
 	char cmdbuf[512];
 	scootd_thread_config *pScootThread = pvScootdThreads;
 	scoot_device *pScootDevice = pScootThread->pScootDevice;
-	int fr = iFrameRateCam[pScootDevice->pState->bits.frame_rate];	
-	char *szRes = szUSBCamResolution[pScootDevice->pState->bits.resolution];
-
-//	sprintf(fn, "%s00%10d_%08x_%s.mp4", szBaseVideoPath, time(NULL), pScootDevice->pState->state, szRes);
-sprintf(fn, "%s00%10d_%08x_%s.mov", szBaseVideoPath, time(NULL), pScootDevice->pState->state, szRes);
+	int fr = iFrameRateCam[pScootDevice->pState->vid[0].frame_rate];	
+	char *szRes = szUSBCamResolution[pScootDevice->pState->vid[0].resolution];
+	int raw = pScootDevice->pState->vid[0].raw;
+	
+	sprintf(fn, "%s00%10d_%08x_%s.mov", szBaseVideoPath, time(NULL), pScootDevice->pState->state, szRes);
 		
 
-//old doesn't keep up with FPS	
-//sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -i /dev/video0 -preset faster -pix_fmt yuv420p %s", fr, szRes, fn);
+	
 
-sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -c:v mjpeg -i /dev/video0  -c:v copy %s", fr, szRes, fn);
+	if(raw)
+	{
+		sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -c:v mjpeg -i /dev/video0  -c:v copy %s", fr, szRes, fn);
+	}
+	else
+	{
+		sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -i /dev/video0 -preset faster -pix_fmt yuv420p %s", fr, szRes, fn);
+	}
 
-
-// ffmpeg -f v4l2 -framerate 30 -video_size 2688x1520 -c:v mjpeg -i /dev/video0 -c:v copy /media/astros/F0C1-F9A3/2688x1520.mov
 
 	printf("SENDING CMD> %s\n", cmdbuf);
 
@@ -79,6 +92,9 @@ sprintf(cmdbuf, "ffmpeg -f v4l2 -framerate %d -video_size %s -c:v mjpeg -i /dev/
 	return NULL;
 
 }
+
+
+
 
 
 
@@ -93,7 +109,7 @@ void scootd_state_change(unsigned int old_state, scootd_thread_config *pScootdTh
 
 	printf("scootd_state_change = 0x%08x  old_state = 0x%08x\n", pScootDevice->pState->state, pOldState->state);		
 
-	if(pOldState->bits.video0)
+	if(pOldState->vid[0].video)
 	{
 		pThread = &pScootDevice->threads[SCOOTD_THREAD_VIDEO_0]; 
 		
@@ -103,7 +119,7 @@ void scootd_state_change(unsigned int old_state, scootd_thread_config *pScootdTh
 		}
 	}
 	
-	if(pScootDevice->pState->bits.video0)
+	if(pScootDevice->pState->vid[0].video)
 	{
 
 		pThread = &pScootDevice->threads[SCOOTD_THREAD_VIDEO_0]; 
@@ -142,7 +158,7 @@ int main(int argc, char **argv)
 	}
 
 
-	printf("scootd - Lab1\n");
+	printf("scootd - Lab3\n");
 
 
 	if(	scootd_util_open_shared_memory("scootd_shared.mem", &aScootDevice))
@@ -160,7 +176,7 @@ int main(int argc, char **argv)
     			tmp = localtime(&t);
 				strftime(formatted_time, sizeof(formatted_time), "%a %b %d %H:%M:%S %Y", tmp);
 				
-				printf("SCOOTD:State Change old_state = %d new_state = %d @ %s video0 = %d video1 = %d\n", old_state, aScootDevice.pState->state, formatted_time, aScootDevice.pState->bits.video0, aScootDevice.pState->bits.video1);
+				printf("SCOOTD:State Change old_state = 0x%08x new_state = 0x%08x @ %s \n", old_state, aScootDevice.pState->state, formatted_time);
 
 				scootd_state_change(old_state, &scdThreadConfig[0]);
 

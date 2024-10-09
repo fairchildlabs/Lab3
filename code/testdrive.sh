@@ -1,58 +1,57 @@
 #./scootd &
 
-./scootdtest 0x0003
+
+#	struct
+#	{
+#		unsigned int video        :  1;
+#		unsigned int frame_rate   :  1;
+#		unsigned int raw          :  1;
+#		unsigned int rsvd         :  1;
+#		unsigned int resolution   :  4;
+#
+#	} vid[2];
+#
+
+
+./scootdtest 0x0005
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x0103
+./scootdtest 0x0001
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x0203
+
+./scootdtest 0x0015
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x0303
+./scootdtest 0x0011
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x0403
+./scootdtest 0x0025
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x0503
+./scootdtest 0x0021
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x0603
+
+./scootdtest 0x0035
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x10003
+./scootdtest 0x0031
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x10103
+./scootdtest 0x0045
 echo "Sleeping 60"
 sleep 60
 
-./scootdtest 0x10203
-echo "Sleeping 60"
-sleep 60
-
-./scootdtest 0x10303
-echo "Sleeping 60"
-sleep 60
-
-./scootdtest 0x10403
-echo "Sleeping 60"
-sleep 60
-
-./scootdtest 0x10503
-echo "Sleeping 60"
-sleep 60
-
-./scootdtest 0x10603
+./scootdtest 0x0041
 echo "Sleeping 60"
 sleep 60
 
